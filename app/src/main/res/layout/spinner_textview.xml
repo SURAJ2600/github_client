@@ -1,0 +1,11 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@android:id/text1"
+          style="?android:attr/spinnerItemStyle"
+          android:singleLine="true"
+          android:layout_width="match_parent"
+          android:padding="@dimen/dimen5dp"
+          android:textSize="@dimen/textsise15"
+          android:layout_height="wrap_content"
+          android:textColor="@color/black"
+          android:ellipsize="marquee"
+          android:textAlignment="inherit"/>
