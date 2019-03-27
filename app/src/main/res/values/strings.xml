@@ -2,4 +2,6 @@
     <string name="app_name">GitHub Client</string>
     <string name="search">Search</string>
     <string name="no_results">No results 😓</string>
+    <string name="no_pullrequest">Looks like there is no open pull request are there in this repository 😓</string>
+
 </resources>

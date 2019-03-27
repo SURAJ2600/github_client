@@ -165,6 +165,8 @@ class SearchGitRepoActivity : AppCompatActivity() {
             var data=Bundle()
             data.putString("owner_name",""+repo.owner.login)
             data.putString("repo_name",""+repo.name)
+            data.putString("user_avatar",""+repo?.owner.avatar_url)
+
             val intent = Intent(this, ViewRepoPullActvity::class.java)
             intent.putExtras(data)
             startActivity(intent)

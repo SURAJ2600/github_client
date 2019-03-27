@@ -4,6 +4,8 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.suraj.githubclient.Utilities.Injection
 import com.suraj.githubclient.Utilities.ViewModelFactory
 import com.suraj.githubclient.ui.SearchRepo.SearchRepoViewModel
@@ -24,5 +26,6 @@ import com.suraj.githubclient.ui.SearchRepo.SearchRepoViewModel
 
 fun <T : ViewModel> AppCompatActivity.obtainViewModel(viewModelClass: Class<T>) =ViewModelProviders.of(this, Injection.provideViewModelFactory(this))
   .get(viewModelClass)
+
 
 

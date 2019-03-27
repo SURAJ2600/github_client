@@ -6,7 +6,13 @@ import com.google.gson.JsonElement
 import com.suraj.githubclient.model.PullRepoModel
 import com.suraj.githubclient.model.PulllRepoResponse
 import com.suraj.githubclient.model.RepoSearchResponse
+import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,6 +47,7 @@ fun searchRepos(
     type: Int,
     page: Int,
     itemsPerPage: Int,
+    disposables: CompositeDisposable,
     onSuccess: (repos: List<Repo>) -> Unit,
     onError: (error: String) -> Unit
 ) {
@@ -52,28 +59,28 @@ fun searchRepos(
     } else {
         PRE_QUALIFIER + query
     }
-    service.searchRepos(apiQuery, page, itemsPerPage).enqueue(
-        object : Callback<RepoSearchResponse> {
-            override fun onFailure(call: Call<RepoSearchResponse>?, t: Throwable) {
-                Log.d(TAG, "fail to get data")
-                onError(t.message ?: "unknown error")
-            }
 
-            override fun onResponse(
-                call: Call<RepoSearchResponse>?,
-                response: Response<RepoSearchResponse>
-            ) {
-                Log.d(TAG, "got a response $response")
-                if (response.isSuccessful) {
-                    val repos = response.body()?.items ?: emptyList()
+    service.searchRepos(apiQuery, page, itemsPerPage).observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribeBy(
+            onSuccess = {
+
+                Log.d(TAG, "got a response $it")
+                if (it != null) {
+                    val repos = it.items ?: emptyList()
                     onSuccess(repos)
                 } else {
-                    onError(response.errorBody()?.string() ?: "Unknown error")
+                    onError("Unknown error")
                 }
+            },
+            onError = {
+
+                onError(it.message ?: "unknown error")
+
             }
-        }
-    )
+        ).addTo(disposables)
 }
+
 /**
  * Search pull based on a owner_name and repo name.
  * Trigger a request to the Github searchRepo API with the following params:
@@ -92,51 +99,43 @@ fun searchPullFromRepo(
     repo_name: String,
     page: Int,
     itemsPerPage: Int,
+    disposables: CompositeDisposable,
     onSuccess: (repos: List<PullRepoModel>) -> Unit,
     onError: (error: String) -> Unit
 ) {
-    Log.d(TAG, ">>>>>>>>>>>>>" + owner_name + repo_name)
 
 
-    service.searchPullsFromRepo(owner_name, repo_name, "All", page, itemsPerPage).enqueue(
-        object : Callback<List<PulllRepoResponse>> {
-            override fun onFailure(call: Call<List<PulllRepoResponse>>?, t: Throwable) {
-                Log.d(TAG, "fail to get data")
-                onError(t.message ?: "unknown error")
-            }
+    service.searchPullsFromRepo(owner_name, repo_name, "All", page, itemsPerPage).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(
 
-            override fun onResponse(
-                call: Call<List<PulllRepoResponse>>?,
-                response: Response<List<PulllRepoResponse>>
-            ) {
-                Log.d(TAG, "got a response ${response.body()}")
-                if (response.isSuccessful) {
+            onSuccess = {
 
-                    if (response.body() != null) {
+                if (it != null) {
 
-                        var PullRepolist = response.body() as List<PulllRepoResponse>
-                        var pullRepoModelList = ArrayList<PullRepoModel>()
-                        for (i in 0..PullRepolist.size - 1) {
-                            var pullMode = PullRepoModel(
-                                PullRepolist.get(i)?.id?.toLong()!!,
-                                PullRepolist.get(i)?.user?.login!!,
-                                PullRepolist.get(i)?.user?.avatar_url!!,
-                                "" + PullRepolist.get(i)?.body
-                            )
-                            pullRepoModelList.add(pullMode)
+                    var PullRepolist = it as List<PulllRepoResponse>
+                    var pullRepoModelList = ArrayList<PullRepoModel>()
+                    for (i in 0..PullRepolist.size - 1) {
+                        var pullMode = PullRepoModel(
+                            PullRepolist.get(i)?.id?.toLong()!!,
+                            PullRepolist.get(i)?.user?.login!!,
+                            PullRepolist.get(i)?.user?.avatar_url!!,
+                            "" + PullRepolist.get(i)?.body
+                        )
+                        pullRepoModelList.add(pullMode)
 
-                        }
-                        onSuccess(pullRepoModelList)
                     }
-
+                    onSuccess(pullRepoModelList)
                 } else {
-                    onError(response.errorBody()?.string() ?: "Unknown error")
+                    onError("Unknown error")
 
                 }
+            },
+            onError = {
+                Log.d(TAG, "fail to get data")
+                onError(it.message ?: "unknown error")
             }
-        }
-    )
-
+        ).addTo(disposables)
 
 }
 
@@ -147,7 +146,7 @@ interface ApiService {
         @Query("q") query: String,
         @Query("page") page: Int,
         @Query("per_page") itemsPerPage: Int
-    ): Call<RepoSearchResponse>
+    ): Single<RepoSearchResponse>
 
     @GET("repos/{owner_name}/{repo_name}/pulls")
     fun searchPullsFromRepo(
@@ -156,7 +155,7 @@ interface ApiService {
         @Query("state") query: String,
         @Query("page") page: Int,
         @Query("per_page") itemsPerPage: Int
-    ): Call<List<PulllRepoResponse>>
+    ): Single<List<PulllRepoResponse>>
 
 
 }

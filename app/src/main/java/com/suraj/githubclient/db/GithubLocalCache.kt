@@ -25,6 +25,17 @@ class GithubLocalCache(
     }
 
     /**
+     * Insert a list of repos in the database, on a background thread.
+     */
+    fun delete(insertFinished: ()-> Unit) {
+        ioExecutor.execute {
+
+            repoDao.deleteAllLocalDatas()
+            insertFinished()
+        }
+    }
+
+    /**
      * Request a LiveData<List<Repo>> from the Dao, based on a repo name. If the name contains
      * multiple words separated by spaces, then we're emulating the GitHub API behavior and allow
      * any characters between the words.

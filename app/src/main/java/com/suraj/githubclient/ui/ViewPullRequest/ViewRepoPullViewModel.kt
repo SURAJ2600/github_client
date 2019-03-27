@@ -8,7 +8,9 @@ import android.util.Log
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoPullResult
 import com.example.android.codelabs.paging.model.RepoSearchResult
+import com.suraj.githubclient.model.PullRepoModel
 import com.suraj.githubclient.repository.RepositoryServiceHandler
+import com.suraj.githubclient.ui.SearchRepo.SearchRepoViewModel
 
 
 /**
@@ -28,17 +30,55 @@ class ViewRepoPullViewModel(private val repository: RepositoryServiceHandler) : 
 
     val state = MutableLiveData<ViewRepoPullViewModeltate>()
 
-      var repoResult=MutableLiveData<RepoPullResult>()
 
-    fun getPullRequestFromRepo(githubOwnerName: String, githubRepoName: String){
+    private val ownername_livedate = MutableLiveData<String>()
+    private val reponame_livedate = MutableLiveData<String>()
+
+
+    var repoResult = MutableLiveData<RepoPullResult>()
+
+
+    private val pullRequestReult: LiveData<RepoPullResult> = Transformations.map(ownername_livedate, {
+        repository.getPullRequestFromRepo(it, reponame_livedate.value!!, { success ->
+
+            state.value = ViewRepoPullViewModeltate.SUCESS
+
+        }, { error ->
+            state.value = ViewRepoPullViewModeltate.ERROR
+
+        })
+
+    })
+
+
+    val repos: LiveData<List<PullRepoModel>> = Transformations.switchMap(pullRequestReult,
+        { it -> it.data })
+    val networkErrors: LiveData<String> = Transformations.switchMap(repoResult,
+        { it -> it.networkErrors })
+
+
+    fun setOwnerAndRepoName(ownername: String, reponame: String) {
         state.value = ViewRepoPullViewModeltate.LOADING
-        var pull_requestlivedata = repository.getPullRequestFromRepo(githubOwnerName, githubRepoName)
-        state.value = ViewRepoPullViewModeltate.SUCESS
-        repoResult.postValue(pull_requestlivedata)
-
-
+        reponame_livedate.postValue(reponame)
+        ownername_livedate.postValue(ownername)
 
     }
 
+    fun listScrolled(visibleItemCount: Int, lastVisibleItemPosition: Int, totalItemCount: Int) {
+        if (visibleItemCount + lastVisibleItemPosition + VISIBLE_THRESHOLD >= totalItemCount) {
+            val immutableQuery1 = repoownername()
+            val immutableQuery2 = reponame()
 
+            if (immutableQuery1 != null&&immutableQuery2!=null) {
+                repository.requestMorePullRequest(immutableQuery1,immutableQuery2)
+            }
+        }
+    }
+
+    fun repoownername(): String? = ownername_livedate.value
+    fun reponame(): String? = reponame_livedate.value
+
+    companion object {
+        private const val VISIBLE_THRESHOLD = 5
+    }
 }

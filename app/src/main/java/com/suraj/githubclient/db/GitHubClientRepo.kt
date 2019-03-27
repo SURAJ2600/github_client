@@ -37,4 +37,8 @@ interface GitHubClientRepo {
     @Query("SELECT * FROM PullRepoModel")
     fun getPullRequestFromRepo(): LiveData<List<PullRepoModel>>
 
+
+    @Query("Delete  FROM PullRepoModel")
+    fun deleteAllLocalDatas()
+
 }
