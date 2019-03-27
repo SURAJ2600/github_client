@@ -16,7 +16,7 @@ import com.suraj.githubclient.ui.SearchRepo.SearchRepoViewModel
 /**
  * @author Suraj
  *
- *Viewmodel for [SearchGitRepoActivity]
+ *Viewmodel for [ViewRepoPullActvity]
  * The ViewModel works with the [RepositoryServiceHandler] to get the data.
  *
  */
