@@ -15,7 +15,7 @@ class ApiClientProvider private constructor() {
 
 
 
-            return "http://206.189.138.34/"
+            return "https://api.github.com/"
 
 
         }

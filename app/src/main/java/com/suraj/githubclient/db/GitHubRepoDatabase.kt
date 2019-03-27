@@ -19,15 +19,19 @@ package com.suraj.githubclient.db
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.example.android.codelabs.paging.model.Repo
+import com.example.android.codelabs.paging.model.owner
+import java.security.acl.Owner
 
 
 @Database(
-        entities = [Repo::class],
+        entities = [Repo::class, owner::class],
         version = 1,
         exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class GitHubRepoDatabase : RoomDatabase() {
 
     abstract fun reposDao(): GitHubClientRepo
@@ -45,7 +49,7 @@ abstract class GitHubRepoDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(context.applicationContext,
-                        GitHubRepoDatabase::class.java, "Github.db")
+                        GitHubRepoDatabase::class.java, "GithubCliensss")
                         .build()
     }
 }

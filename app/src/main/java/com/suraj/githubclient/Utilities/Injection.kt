@@ -4,9 +4,12 @@ package com.suraj.githubclient.Utilities
 
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import com.suraj.githubclient.api.ApiClientProvider
+import com.suraj.githubclient.api.ApiService
 import com.suraj.githubclient.db.GitHubClientRepo
 import com.suraj.githubclient.db.GitHubRepoDatabase
 import com.suraj.githubclient.db.GithubLocalCache
+import com.suraj.githubclient.repository.RepositoryServiceHandler
 
 import java.util.concurrent.Executors
 
@@ -29,8 +32,8 @@ object Injection {
      * Creates an instance of [GithubRepository] based on the [GithubService] and a
      * [GithubLocalCache]
      */
-    private fun provideGithubRepository(context: Context): GithubRepository {
-        return GitHubClientRepo(GithubService.create(), provideCache(context))
+    private fun provideGithubRepository(context: Context): RepositoryServiceHandler {
+        return RepositoryServiceHandler(ApiClientProvider.create(), provideCache(context))
     }
 
     /**

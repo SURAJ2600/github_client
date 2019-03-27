@@ -35,5 +35,17 @@ data class Repo(
         @field:SerializedName("html_url") val url: String,
         @field:SerializedName("stargazers_count") val stars: Int,
         @field:SerializedName("forks_count") val forks: Int,
-        @field:SerializedName("language") val language: String?
+        @field:SerializedName("language") val language: String?,
+        @field:SerializedName("owner") val owner: owner
 )
+
+@Entity(tableName = "owner")
+data class owner(
+        @PrimaryKey @field:SerializedName("id") val id: Long,
+        @field:SerializedName("login") val login: String,
+        @field:SerializedName("avatar_url") val avatar_url: String,
+        @field:SerializedName("organizations_url") val organizations_url: String?
+
+)
+
+

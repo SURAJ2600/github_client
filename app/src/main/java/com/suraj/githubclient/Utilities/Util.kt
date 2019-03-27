@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.LayoutInflater
+import com.suraj.githubclient.R
 
 
 object Util {
@@ -33,22 +34,22 @@ object Util {
 
 
 
-//    fun ShowProgressView(mCtx: Context): Dialog {
-//        val factory = LayoutInflater.from(mCtx)
-//
-//        val DialogView = factory.inflate(R.layout.progressview, null)
-//
-//        val main_dialog = Dialog(mCtx)
-//
-//        main_dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        main_dialog.setCanceledOnTouchOutside(true)
-//
-//        main_dialog.setCancelable(true)
-//
-//
-//        main_dialog.setContentView(DialogView)
-//
-//        return main_dialog
-//    }
+    fun ShowProgressView(mCtx: Context): Dialog {
+        val factory = LayoutInflater.from(mCtx)
+
+        val DialogView = factory.inflate(R.layout.progress_view, null)
+
+        val main_dialog = Dialog(mCtx)
+
+        main_dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        main_dialog.setCanceledOnTouchOutside(true)
+
+        main_dialog.setCancelable(true)
+
+
+        main_dialog.setContentView(DialogView)
+
+        return main_dialog
+    }
 
 }
