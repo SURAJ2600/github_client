@@ -2,6 +2,7 @@ package com.suraj.githubclient.repository
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.example.android.codelabs.paging.model.RepoPullResult
 import com.example.android.codelabs.paging.model.RepoSearchResult
 import com.suraj.githubclient.Utilities.LogsUtils
 import com.suraj.githubclient.api.ApiService
@@ -62,7 +63,6 @@ private val cache: GithubLocalCache
 
         isRequestInProgress_SearchRepo = true
         searchRepos(service, query,type!!, lastRequestedPage_SearchRepo, NETWORK_PAGE_SIZE, { repos ->
-            LogsUtils.makeLogE("sasa",">>"+repos)
             cache.insert(repos, {
                 lastRequestedPage_SearchRepo++
                 isRequestInProgress_SearchRepo = false
@@ -73,16 +73,13 @@ private val cache: GithubLocalCache
         })
     }
 
-     fun getPullRequestFromRepo(githubOwnerName: String, githubRepoName: String) {
+     fun getPullRequestFromRepo(githubOwnerName: String, githubRepoName: String) :RepoPullResult{
 
 
         lastRequestedPage_ViewPull = 1
         requestAndSavePullData(githubOwnerName,githubRepoName)
-
-        // Get data from the local cache
-      //  val data = cache.reposByName(query)
-///
-    //  return RepoSearchResult(null!!, networkErrors)
+        val data = cache.pullDataFromRepo()
+         return RepoPullResult(data, networkErrors)
 
 
     }
@@ -95,8 +92,11 @@ private val cache: GithubLocalCache
 
         isRequestInProgress_ViewPull = true
         searchPullFromRepo(service, githubOwnerName,githubRepoName, lastRequestedPage_SearchRepo, NETWORK_PAGE_SIZE, { repos ->
-            LogsUtils.makeLogE("sasa",">>"+repos)
 
+            cache.insertPullRepo(repos, {
+                lastRequestedPage_ViewPull++
+                isRequestInProgress_ViewPull = false
+            })
         }, { error ->
             networkErrors.postValue(error)
             isRequestInProgress_ViewPull = false

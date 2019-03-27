@@ -59,6 +59,8 @@ class ViewRepoPullActvity : AppCompatActivity() {
             })
 
 
+
+
         }
 
 
@@ -77,11 +79,11 @@ class ViewRepoPullActvity : AppCompatActivity() {
         }
         if (intent != null) {
             var data = intent.extras
-
-
-
             viewModel.getPullRequestFromRepo(data.getString("owner_name"),data.getString("repo_name"))
+            viewModel.repoResult.observe(this@ViewRepoPullActvity, Observer {
 
+                LogsUtils.makeLogE("searchvlaues",">>>"+it?.data?.value)
+            })
 
         }
 

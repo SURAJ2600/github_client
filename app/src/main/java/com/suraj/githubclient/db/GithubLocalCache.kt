@@ -4,6 +4,7 @@ package com.suraj.githubclient.db
 import android.arch.lifecycle.LiveData
 import android.util.Log
 import com.example.android.codelabs.paging.model.Repo
+import com.suraj.githubclient.model.PullRepoModel
 import java.util.concurrent.Executor
 
 
@@ -34,4 +35,28 @@ class GithubLocalCache(
         val query = "%${name.replace(' ', '%')}%"
         return repoDao.reposByName(query)
     }
+
+    /**
+     * Insert a list of pull request data as [PullRepoModel] in the database, on a background thread.
+     */
+    fun insertPullRepo(repos: List<PullRepoModel>, insertFinished: ()-> Unit) {
+        ioExecutor.execute {
+            Log.d("GithubLocalCache", "inserting ${repos.size} repos")
+            repoDao.insertPullRepo(repos)
+            insertFinished()
+        }
+    }
+
+
+
+    /**
+     * Request a LiveData<List<Repo>> from the Dao, based on sort DESC or AESC
+     *
+     */
+    fun pullDataFromRepo(): LiveData<List<PullRepoModel>> {
+        // appending '%' so we can allow other characters to be before and after the query string
+        return repoDao.getPullRequestFromRepo()
+    }
+
+
 }

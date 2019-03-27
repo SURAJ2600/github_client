@@ -17,6 +17,7 @@
 package com.example.android.codelabs.paging.model
 
 import android.arch.lifecycle.LiveData
+import com.suraj.githubclient.model.PullRepoModel
 
 /**
  * RepoSearchResult from a search, which contains LiveData<List<Repo>> holding query data,
@@ -24,5 +25,9 @@ import android.arch.lifecycle.LiveData
  */
 data class RepoSearchResult(
         val data: LiveData<List<Repo>>,
+        val networkErrors: LiveData<String>
+)
+data class RepoPullResult(
+        val data: LiveData<List<PullRepoModel>>,
         val networkErrors: LiveData<String>
 )

@@ -23,11 +23,12 @@ import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.owner
+import com.suraj.githubclient.model.PullRepoModel
 import java.security.acl.Owner
 
 
 @Database(
-        entities = [Repo::class, owner::class],
+        entities = [Repo::class, owner::class,PullRepoModel::class],
         version = 1,
         exportSchema = false
 )
@@ -49,7 +50,7 @@ abstract class GitHubRepoDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(context.applicationContext,
-                        GitHubRepoDatabase::class.java, "GithubCliensss")
+                        GitHubRepoDatabase::class.java, "GithubClienssshh")
                         .build()
     }
 }
