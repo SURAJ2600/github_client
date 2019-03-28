@@ -77,6 +77,10 @@ class SearchGitRepoActivity : AppCompatActivity() {
 
 
                     }
+                    SearchRepoViewModelState.INTERNET->{
+                        LogsUtils.snackBarAction(search_view, getString(R.string.internet))
+
+                    }
 
 
                 }
@@ -97,14 +101,11 @@ class SearchGitRepoActivity : AppCompatActivity() {
         //getting the value from saved instance if device configuration changes happne
 
 
-        if(Util.isConnected(this)) {
+
             val query = savedInstanceState?.getString(LAST_SEARCH_QUERY) ?: DEFAULT_QUERY
             viewModel.searchRepo(query)
             initSearch(query)
-        }
-        else {
-            LogsUtils.snackBarAction(pull_view, "Please connect to internet")
-        }
+
 
     }
 
@@ -283,18 +284,7 @@ class SearchGitRepoActivity : AppCompatActivity() {
         private const val DEFAULT_QUERY = "Github"
     }
 
-    override fun onResume() {
-        super.onResume()
 
-
-        if(Util.isConnected(this)) {
-
-            initSearch(et_search.text.trim().toString())
-        }
-        else {
-            LogsUtils.snackBarAction(pull_view, "Please connect to internet")
-        }
-    }
 
     fun obtainViewModels(): SearchRepoViewModel = obtainViewModel(SearchRepoViewModel::class.java)
 }

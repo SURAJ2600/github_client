@@ -41,7 +41,7 @@ object Injection {
      * [ViewModel] objects.
      */
     fun provideViewModelFactory(context: Context): ViewModelProvider.Factory {
-        return ViewModelFactory(provideGithubRepository(context))
+        return ViewModelFactory(context,provideGithubRepository(context))
     }
 
 }

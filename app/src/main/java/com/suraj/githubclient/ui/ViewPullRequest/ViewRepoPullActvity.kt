@@ -61,6 +61,10 @@ class ViewRepoPullActvity : AppCompatActivity() {
                         prgressDialog.dismiss()
 
                     }
+                    ViewRepoPullViewModeltate.INTERNET->{
+
+                            LogsUtils.snackBarAction(pull_view,getString(R.string.internet))
+                    }
 
 
                 }
@@ -102,7 +106,7 @@ class ViewRepoPullActvity : AppCompatActivity() {
         //Check the intent value and if not null pass the data to viewmodel
 
 
-        if(Util.isConnected(this)) {
+
             if (intent != null) {
                 var data = intent.extras
                 viewModel.setOwnerAndRepoName(data.getString("owner_name"), data.getString("repo_name"))
@@ -120,10 +124,8 @@ class ViewRepoPullActvity : AppCompatActivity() {
 
 
             }
-        }
-        else{
-            LogsUtils.snackBarAction(search_view,"Please connect to internet")
-        }
+
+
 
 
         /**

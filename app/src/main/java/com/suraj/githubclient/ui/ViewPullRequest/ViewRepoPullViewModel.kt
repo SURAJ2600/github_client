@@ -5,10 +5,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import android.arch.paging.PagedList
+import android.content.Context
 import android.util.Log
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoPullResult
 import com.example.android.codelabs.paging.model.RepoSearchResult
+import com.suraj.githubclient.Utilities.Util
 import com.suraj.githubclient.model.PullRepoModel
 import com.suraj.githubclient.repository.RepositoryServiceHandler
 import com.suraj.githubclient.ui.SearchRepo.SearchRepoViewModel
@@ -23,10 +25,10 @@ import com.suraj.githubclient.ui.SearchRepo.SearchRepoViewModel
  */
 
 enum class ViewRepoPullViewModeltate {
-    LOADING, ERROR, NONE, SUCESS
+    LOADING, ERROR, NONE, SUCESS,INTERNET
 }
 
-class ViewRepoPullViewModel(private val repository: RepositoryServiceHandler) : ViewModel() {
+class ViewRepoPullViewModel(var context:Context,private val repository: RepositoryServiceHandler) : ViewModel() {
 
 
     val state = MutableLiveData<ViewRepoPullViewModeltate>()
@@ -60,8 +62,10 @@ class ViewRepoPullViewModel(private val repository: RepositoryServiceHandler) : 
 
     fun setOwnerAndRepoName(ownername: String, reponame: String) {
         state.value = ViewRepoPullViewModeltate.LOADING
-        reponame_livedate.postValue(reponame)
-        ownername_livedate.postValue(ownername)
+
+
+            reponame_livedate.postValue(reponame)
+            ownername_livedate.postValue(ownername)
 
     }
 
