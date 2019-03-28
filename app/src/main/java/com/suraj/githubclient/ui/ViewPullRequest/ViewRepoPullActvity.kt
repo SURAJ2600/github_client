@@ -2,6 +2,7 @@ package com.suraj.githubclient.ui.ViewPullRequest
 
 import android.app.Dialog
 import android.arch.lifecycle.Observer
+import android.arch.paging.PagedList
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.UiThread
@@ -131,7 +132,7 @@ class ViewRepoPullActvity : AppCompatActivity() {
 
     private fun initAdapter() {
         pull_list.adapter = adapter
-        viewModel.repos.observe(this, Observer<List<PullRepoModel>> {
+        viewModel.repos.observe(this, Observer<PagedList<PullRepoModel>> {
             Log.d("Activity", "list: ${it?.size}")
             showVisibileViews(it?.size == 0)
             adapter.submitList(it)

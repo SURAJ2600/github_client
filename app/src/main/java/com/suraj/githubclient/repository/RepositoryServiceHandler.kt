@@ -1,6 +1,7 @@
 package com.suraj.githubclient.repository
 
 import android.arch.lifecycle.MutableLiveData
+import android.arch.paging.LivePagedListBuilder
 import android.util.Log
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoPullResult
@@ -57,8 +58,10 @@ class RepositoryServiceHandler(
         lastRequestedPage_SearchRepo = 1
         requestAndSaveData(query, type)
 
-        // Get data from the local cache
-        val data = cache.reposByName(query)
+        val dataSourceFactory = cache.reposByName(query)
+
+        // Get the paged list
+        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE).build()
 
         return RepoSearchResult(data, networkErrors)
     }
@@ -102,7 +105,12 @@ class RepositoryServiceHandler(
 
         lastRequestedPage_ViewPull = 1
         requestAndSavePullData(githubOwnerName, githubRepoName)
-        val data = cache.pullDataFromRepo()
+
+        val dataSourceFactory = cache.pullDataFromRepo()
+
+        // Get the paged list
+        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE).build()
+
         if (data != null) {
             onSuccess.invoke("Success")
         } else {
@@ -144,5 +152,6 @@ class RepositoryServiceHandler(
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 50
+        private const val DATABASE_PAGE_SIZE = 20
     }
 }

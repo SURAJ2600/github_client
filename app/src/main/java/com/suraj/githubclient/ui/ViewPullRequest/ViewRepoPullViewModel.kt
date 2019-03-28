@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import android.arch.paging.PagedList
 import android.util.Log
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoPullResult
@@ -51,7 +52,7 @@ class ViewRepoPullViewModel(private val repository: RepositoryServiceHandler) : 
     })
 
 
-    val repos: LiveData<List<PullRepoModel>> = Transformations.switchMap(pullRequestReult,
+    val repos: LiveData<PagedList<PullRepoModel>> = Transformations.switchMap(pullRequestReult,
         { it -> it.data })
     val networkErrors: LiveData<String> = Transformations.switchMap(repoResult,
         { it -> it.networkErrors })

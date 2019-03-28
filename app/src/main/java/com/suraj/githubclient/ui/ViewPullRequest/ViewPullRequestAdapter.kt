@@ -16,6 +16,7 @@
 
 package com.suraj.githubclient.ui.ViewPullRequest
 
+import android.arch.paging.PagedListAdapter
 import android.content.Context
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
@@ -32,7 +33,7 @@ import kotlinx.android.synthetic.main.pullrequest_view_item.view.*
 /**
  * Adapter for the list of repositories.
  */
-class ViewPullRequestAdapter(var context: Context) : ListAdapter<PullRepoModel, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
+class ViewPullRequestAdapter(var context: Context) : PagedListAdapter<PullRepoModel, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
 
 
 
@@ -52,7 +53,7 @@ class ViewPullRequestAdapter(var context: Context) : ListAdapter<PullRepoModel, 
 
     fun getItemFromPostion(position: Int) :PullRepoModel
     {
-     return  getItem(position)
+     return  getItem(position)!!
     }
 
     companion object {

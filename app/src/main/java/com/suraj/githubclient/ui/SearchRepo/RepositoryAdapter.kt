@@ -16,6 +16,7 @@
 
 package com.suraj.githubclient.ui.SearchRepo
 
+import android.arch.paging.PagedListAdapter
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -31,7 +32,7 @@ import kotlinx.android.synthetic.main.repo_view_item.view.*
 /**
  * Adapter for the list of repositories.
  */
-class RepositoryAdapter : ListAdapter<Repo, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
+class RepositoryAdapter : PagedListAdapter<Repo, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
 
 
     var viewPullClicked:(postion:Int)->Unit={
@@ -57,7 +58,7 @@ class RepositoryAdapter : ListAdapter<Repo, RecyclerView.ViewHolder>(REPO_COMPAR
 
     fun getItemFromPostion(position: Int) :Repo
     {
-     return  getItem(position)
+     return  getItem(position)!!
     }
 
     companion object {

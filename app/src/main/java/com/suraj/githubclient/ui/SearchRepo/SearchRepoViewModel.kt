@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import android.arch.paging.PagedList
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoSearchResult
 import com.suraj.githubclient.repository.RepositoryServiceHandler
@@ -45,7 +46,7 @@ class SearchRepoViewModel(private val repository: RepositoryServiceHandler) : Vi
 
 
 
-    val repos: LiveData<List<Repo>> = Transformations.switchMap(repoResult,
+    val repos: LiveData<PagedList<Repo>> = Transformations.switchMap(repoResult,
         { it -> it.data })
     val networkErrors: LiveData<String> = Transformations.switchMap(repoResult,
         { it -> it.networkErrors })

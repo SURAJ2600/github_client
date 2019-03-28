@@ -3,6 +3,7 @@ package com.suraj.githubclient.ui.SearchRepo
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -148,7 +149,7 @@ class SearchGitRepoActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         repo_list.adapter = adapter
-        viewModel.repos.observe(this, Observer<List<Repo>> {
+        viewModel.repos.observe(this, Observer<PagedList<Repo>> {
             Log.d("Activity", "list: ${it?.size}")
             showVisibileViews(it?.size == 0)
             adapter.submitList(it)

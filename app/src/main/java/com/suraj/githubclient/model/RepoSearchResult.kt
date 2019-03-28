@@ -17,6 +17,7 @@
 package com.example.android.codelabs.paging.model
 
 import android.arch.lifecycle.LiveData
+import android.arch.paging.PagedList
 import com.suraj.githubclient.model.PullRepoModel
 
 /**
@@ -24,10 +25,10 @@ import com.suraj.githubclient.model.PullRepoModel
  * and a LiveData<String> of network error state.
  */
 data class RepoSearchResult(
-        val data: LiveData<List<Repo>>,
+        val data: LiveData<PagedList<Repo>>,
         val networkErrors: LiveData<String>
 )
 data class RepoPullResult(
-        val data: LiveData<List<PullRepoModel>>,
+        val data: LiveData<PagedList<PullRepoModel>>,
         val networkErrors: LiveData<String>
 )
