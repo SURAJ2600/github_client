@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 
 import com.suraj.githubclient.Extensions.obtainViewModel
 import com.suraj.githubclient.R
+import com.suraj.githubclient.Utilities.LogsUtils
 import com.suraj.githubclient.Utilities.Util
 import com.suraj.githubclient.model.PullRepoModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -100,22 +101,28 @@ class ViewRepoPullActvity : AppCompatActivity() {
 
         //Check the intent value and if not null pass the data to viewmodel
 
-        if (intent != null) {
-            var data = intent.extras
-            viewModel.setOwnerAndRepoName(data.getString("owner_name"), data.getString("repo_name"))
+
+        if(Util.isConnected(this)) {
+            if (intent != null) {
+                var data = intent.extras
+                viewModel.setOwnerAndRepoName(data.getString("owner_name"), data.getString("repo_name"))
 
 
 
-            Glide
-                .with(this)
-                .load(data.getString("user_avatar"))
-                .centerCrop()
-                .placeholder(R.drawable.ic_user)
-                .into(profile_image)
-            tv_user_name.text ="User :"+ data.getString("owner_name")
-            tv_reponame.text = "Repository : "+data.getString("repo_name")
+                Glide
+                    .with(this)
+                    .load(data.getString("user_avatar"))
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_user)
+                    .into(profile_image)
+                tv_user_name.text = "User :" + data.getString("owner_name")
+                tv_reponame.text = "Repository : " + data.getString("repo_name")
 
 
+            }
+        }
+        else{
+            LogsUtils.snackBarAction(search_view,"Please connect to internet")
         }
 
 

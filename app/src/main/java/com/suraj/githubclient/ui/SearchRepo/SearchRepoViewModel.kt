@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.paging.PagedList
 import com.example.android.codelabs.paging.model.Repo
 import com.example.android.codelabs.paging.model.RepoSearchResult
+import com.suraj.githubclient.Utilities.Util
 import com.suraj.githubclient.repository.RepositoryServiceHandler
 
 
@@ -19,7 +20,7 @@ import com.suraj.githubclient.repository.RepositoryServiceHandler
  */
 
 enum class SearchRepoViewModelState{
-    LOADING,ERROR,NONE,SUCESS
+    LOADING,ERROR,NONE,SUCESS,INTERNET
 }
 
 class SearchRepoViewModel(private val repository: RepositoryServiceHandler) : ViewModel() {
@@ -56,12 +57,14 @@ class SearchRepoViewModel(private val repository: RepositoryServiceHandler) : Vi
      */
     fun searchRepo(queryString: String) {
 
+
         state.value= SearchRepoViewModelState.LOADING
         queryLiveData.postValue(queryString)
         state.value= SearchRepoViewModelState.NONE
     }
 
     fun setSpinnerValue(type: Int) {
+
         spinner_item.postValue(type)
     }
 

@@ -26,6 +26,7 @@ import com.suraj.githubclient.Utilities.LogsUtils
 import com.suraj.githubclient.Utilities.Util
 import com.suraj.githubclient.ui.ViewPullRequest.ViewRepoPullActvity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_view_repo_pull_actvity.*
 import kotlinx.android.synthetic.main.search_box_layout.*
 
 
@@ -94,11 +95,19 @@ class SearchGitRepoActivity : AppCompatActivity() {
 
 
         //getting the value from saved instance if device configuration changes happne
-        val query = savedInstanceState?.getString(LAST_SEARCH_QUERY) ?: DEFAULT_QUERY
-        viewModel.searchRepo(query)
-        initSearch(query)
+
+
+        if(Util.isConnected(this)) {
+            val query = savedInstanceState?.getString(LAST_SEARCH_QUERY) ?: DEFAULT_QUERY
+            viewModel.searchRepo(query)
+            initSearch(query)
+        }
+        else {
+            LogsUtils.snackBarAction(pull_view, "Please connect to internet")
+        }
 
     }
+
 
     private fun initViews() {
 
@@ -272,6 +281,19 @@ class SearchGitRepoActivity : AppCompatActivity() {
     companion object {
         private const val LAST_SEARCH_QUERY: String = "last_search_query"
         private const val DEFAULT_QUERY = "Github"
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
+        if(Util.isConnected(this)) {
+
+            initSearch(et_search.text.trim().toString())
+        }
+        else {
+            LogsUtils.snackBarAction(pull_view, "Please connect to internet")
+        }
     }
 
     fun obtainViewModels(): SearchRepoViewModel = obtainViewModel(SearchRepoViewModel::class.java)
